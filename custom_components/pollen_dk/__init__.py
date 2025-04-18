@@ -14,7 +14,6 @@ from .const import (
     REGION_IDS,
 )
 
-_LOGGER: logging.Logger = logging.getLogger(__package__)
 _LOGGER = logging.getLogger(__name__)
 
 

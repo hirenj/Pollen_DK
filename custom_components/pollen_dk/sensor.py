@@ -17,7 +17,6 @@ from datetime import timedelta
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-_LOGGER: logging.Logger = logging.getLogger(__package__)
 _LOGGER = logging.getLogger(__name__)
 
 

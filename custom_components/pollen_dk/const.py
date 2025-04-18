@@ -2,6 +2,7 @@ CONF_CLIENT = "client"
 CONF_PLATFORM = "sensor"
 CONF_REGIONS = "regions"
 CONF_POLLEN_TYPES = "pollen_types"
+CONF_ENTRY_ID = "entry_id" # Added for coordinator tracking
 DOMAIN = "pollen_dk"
 NAME_PREFIX = "Pollen"
 POLLEN_IDS = {
