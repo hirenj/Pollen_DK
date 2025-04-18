@@ -49,11 +49,10 @@ async def async_setup_entry(
     for region in regions_list: # Iterate over PollenRegion objects
         region_id = region.getID() # Get ID from the object
         # Iterate over the items (pollen_id, pollen_object) in the dictionary
-        for pollen in [*region.getPollenTypes()]:
-            print(pollen.getID())
+        for pollen_id, pollen_obj in region.getPollenTypes().items():
             # Pass the integer pollen_id to the constructor
             entities.append(
-                PollenSensor(coordinator, pollen_DK, region_id, pollen.getID(), regions_len)
+                PollenSensor(coordinator, pollen_DK, region_id, pollen_id, regions_len)
             )
     async_add_entities(entities)
 
@@ -109,13 +108,8 @@ class PollenSensor(CoordinatorEntity, SensorEntity): # Inherit from CoordinatorE
         """Return the pollen object from the client."""
         return self.region().getPollenTypeByID(self._pollenID)
 
-    def name(self) -> str:
-        print(self._generate_sensor_name())
-        """Return the name of the sensor."""
-        # Consider using self._attr_name which is set in __init__
-        # If the name needs to be dynamic based on state, keep this property.
-        # Otherwise, setting self._attr_name in __init__ is preferred.
-        return self._generate_sensor_name() # Use the helper
+    # The 'name' method is removed. Home Assistant uses self._attr_name (set in __init__)
+    # because _attr_has_entity_name = True.
 
     @property
     def icon(self) -> str:
