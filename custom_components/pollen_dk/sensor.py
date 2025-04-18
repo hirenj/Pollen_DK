@@ -49,10 +49,10 @@ async def async_setup_entry(
     for region in regions_list: # Iterate over PollenRegion objects
         region_id = region.getID() # Get ID from the object
         # Iterate over the items (pollen_id, pollen_object) in the dictionary
-        for pollen_id, pollen_obj in region.getPollenTypes().items():
+        for pollen_obj in [*region.getPollenTypes()]:
             # Pass the integer pollen_id to the constructor
             entities.append(
-                PollenSensor(coordinator, pollen_DK, region_id, pollen_id, regions_len)
+                PollenSensor(coordinator, pollen_DK, region_id, pollen_obj.getID(), regions_len)
             )
     async_add_entities(entities)
 
@@ -92,19 +92,17 @@ class PollenSensor(CoordinatorEntity, SensorEntity): # Inherit from CoordinatorE
         pollen_name = self.pollen().getName()
         if self._regionsLen > 1:
             region_short_name = self.region().getName().split()[0] # Assumes "Vest" or "Øst"
-            return f"{NAME_PREFIX}_{pollen_name}_{region_short_name}"
+            return f"{NAME_PREFIX} {pollen_name} {region_short_name}"
         else:
-            return f"{NAME_PREFIX}_{pollen_name}"
+            return f"{NAME_PREFIX} {pollen_name}"
 
     # Helper methods to get current region/pollen data from the client instance
     def region(self) -> PollenRegion:
-        print('region',self._client.getRegionByID(self._regionID))
         """Return the region object from the client."""
         # Access the client stored during init
         return self._client.getRegionByID(self._regionID)
 
     def pollen(self) -> PollenType:
-        print('pollen',self.region().getPollenTypeByID(self._pollenID))
         """Return the pollen object from the client."""
         return self.region().getPollenTypeByID(self._pollenID)
 
