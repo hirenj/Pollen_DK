@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable # Add type hint import
+from typing import Any, Callable # Add Any import
 
 from homeassistant.config_entries import ConfigEntry # Add ConfigEntry import
 from homeassistant.const import ATTR_ATTRIBUTION
