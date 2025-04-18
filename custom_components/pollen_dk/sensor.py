@@ -48,9 +48,9 @@ async def async_setup_entry(
     regions_len = len(regions_list)
     for region in regions_list: # Iterate over PollenRegion objects
         region_id = region.getID() # Get ID from the object
-        for pollen_id, pollen in region.getPollenTypes().items():
+        for pollen in [*region.getPollenTypes()]:
             entities.append(
-                PollenSensor(coordinator, pollen_DK, region_id, pollen_id, regions_len)
+                PollenSensor(coordinator, pollen_DK, region_id, pollen.getID(), regions_len)
             )
     async_add_entities(entities)
 
@@ -94,15 +94,18 @@ class PollenSensor(CoordinatorEntity, SensorEntity): # Inherit from CoordinatorE
 
     # Helper methods to get current region/pollen data from the client instance
     def region(self) -> PollenRegion:
+        print('region',self._client.getRegionByID(self._regionID))
         """Return the region object from the client."""
         # Access the client stored during init
         return self._client.getRegionByID(self._regionID)
 
     def pollen(self) -> PollenType:
+        print('pollen',self.region().getPollenTypeByID(self._pollenID))
         """Return the pollen object from the client."""
         return self.region().getPollenTypeByID(self._pollenID)
 
     def name(self) -> str:
+        print(self._generate_sensor_name())
         """Return the name of the sensor."""
         # Consider using self._attr_name which is set in __init__
         # If the name needs to be dynamic based on state, keep this property.
