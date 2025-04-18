@@ -63,6 +63,7 @@ class PollenSensor(CoordinatorEntity, SensorEntity): # Inherit from CoordinatorE
     # Set `_attr_has_entity_name = True` if using Name property helper, else False or omit.
     _attr_has_entity_name = True # Requires HA Core 2021.12+
 
+    _attr_native_unit_of_measurement = "grains/m3"
 
 
     def __init__(self, coordinator, client: Pollen_DK, regionID: int, pollenID: int, regionsLen: int) -> None:
