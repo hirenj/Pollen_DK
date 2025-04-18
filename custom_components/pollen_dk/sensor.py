@@ -42,8 +42,12 @@ async def async_setup_entry(
     entities = []
     regions = pollen_DK.getRegions() # This should ideally use coordinator.data if update returns data
     # However, the current API client updates its internal state, so accessing it directly is okay here.
-    regions_len = len(regions)
-    for region_id, region in regions.items():
+    # The getRegions() method seems to return dict_values, so we iterate directly
+    # and get the ID from the region object.
+    regions_list = list(regions) # Convert dict_values to list for len() and iteration
+    regions_len = len(regions_list)
+    for region in regions_list: # Iterate over PollenRegion objects
+        region_id = region.getID() # Get ID from the object
         for pollen_id, pollen in region.getPollenTypes().items():
             entities.append(
                 PollenSensor(coordinator, pollen_DK, region_id, pollen_id, regions_len)
