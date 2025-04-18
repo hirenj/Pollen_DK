@@ -1,5 +1,5 @@
 CONF_CLIENT = "client"
-CONF_PLATFORM = "sensor"
+# CONF_PLATFORM = "sensor" # Removed, no longer needed
 CONF_REGIONS = "regions"
 CONF_POLLEN_TYPES = "pollen_types"
 CONF_ENTRY_ID = "entry_id" # Added for coordinator tracking
