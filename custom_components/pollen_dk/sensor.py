@@ -48,9 +48,11 @@ async def async_setup_entry(
     regions_len = len(regions_list)
     for region in regions_list: # Iterate over PollenRegion objects
         region_id = region.getID() # Get ID from the object
-        for pollen in [*region.getPollenTypes()]:
+        # Iterate over the items (pollen_id, pollen_object) in the dictionary
+        for pollen_id, pollen_obj in region.getPollenTypes().items():
+            # Pass the integer pollen_id to the constructor
             entities.append(
-                PollenSensor(coordinator, pollen_DK, region_id, pollen.getID(), regions_len)
+                PollenSensor(coordinator, pollen_DK, region_id, pollen_id, regions_len)
             )
     async_add_entities(entities)
 
