@@ -49,10 +49,11 @@ async def async_setup_entry(
     for region in regions_list: # Iterate over PollenRegion objects
         region_id = region.getID() # Get ID from the object
         # Iterate over the items (pollen_id, pollen_object) in the dictionary
-        for pollen_id, pollen_obj in region.getPollenTypes().items():
+        for pollen in [*region.getPollenTypes()]:
+            print(pollen.getID())
             # Pass the integer pollen_id to the constructor
             entities.append(
-                PollenSensor(coordinator, pollen_DK, region_id, pollen_id, regions_len)
+                PollenSensor(coordinator, pollen_DK, region_id, pollen.getID(), regions_len)
             )
     async_add_entities(entities)
 
@@ -61,7 +62,9 @@ class PollenSensor(CoordinatorEntity, SensorEntity): # Inherit from CoordinatorE
     """Representation of a Pollen Sensor."""
 
     # Set `_attr_has_entity_name = True` if using Name property helper, else False or omit.
-    # _attr_has_entity_name = True # Requires HA Core 2021.12+
+    _attr_has_entity_name = True # Requires HA Core 2021.12+
+
+
 
     def __init__(self, coordinator, client: Pollen_DK, regionID: int, pollenID: int, regionsLen: int) -> None:
         """Initialize the sensor."""
@@ -90,9 +93,9 @@ class PollenSensor(CoordinatorEntity, SensorEntity): # Inherit from CoordinatorE
         pollen_name = self.pollen().getName()
         if self._regionsLen > 1:
             region_short_name = self.region().getName().split()[0] # Assumes "Vest" or "Øst"
-            return f"{NAME_PREFIX} {pollen_name} {region_short_name}"
+            return f"{NAME_PREFIX}_{pollen_name}_{region_short_name}"
         else:
-            return f"{NAME_PREFIX} {pollen_name}"
+            return f"{NAME_PREFIX}_{pollen_name}"
 
     # Helper methods to get current region/pollen data from the client instance
     def region(self) -> PollenRegion:
